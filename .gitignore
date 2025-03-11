@@ -10,7 +10,6 @@ yarn.lock
 /target/
 /bin/
 *.class
-*.jar
 *.war
 *.ear
 /mvnw
