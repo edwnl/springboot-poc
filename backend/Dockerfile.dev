@@ -5,5 +5,6 @@ COPY build.gradle settings.gradle ./
 RUN gradle dependencies --no-daemon
 # Copy source code
 COPY src ./src
+EXPOSE 8080
 # Run in continuous mode with bootRun
 CMD ["sh", "-c", "gradle -t classes & gradle bootRun --no-daemon"]

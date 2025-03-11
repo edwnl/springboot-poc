@@ -8,10 +8,13 @@ export default function Home() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Use environment variable with fallback for local development
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
   const fetchHello = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/hello");
+      const response = await fetch(`${backendUrl}/api/hello`);
       const data = await response.text();
       setMessage(data);
     } catch (error) {
