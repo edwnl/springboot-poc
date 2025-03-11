@@ -34,7 +34,6 @@ jobs:
       - name: Build with Gradle
         run: |
           cd backend
-          ls
           ./gradlew build
 
       - name: Log in to GitHub Container Registry
@@ -58,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
-          file: Dockerfile.prod
+          file: ./backend/Dockerfile.prod
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
