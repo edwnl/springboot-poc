@@ -11,6 +11,8 @@ export default function Home() {
   // Use environment variable with fallback for local development
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
+  console.log(backendUrl)
+
   const fetchHello = async () => {
     setLoading(true);
     try {
