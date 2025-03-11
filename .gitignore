@@ -68,3 +68,6 @@ bin/
 /nbproject/private/
 
 .gradle
+gradle
+gradlew
+gradlew.bat

@@ -1,6 +1,4 @@
 # docker-compose.yml
-version: '3.8'
-
 services:
   backend:
     build:
@@ -8,9 +6,19 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "8080:8080"
-    volumes:
-      - ./backend:/app
-      - ~/.gradle:/root/.gradle
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    develop:
+      watch:
+        - path: ./backend/src
+          target: /app/src
+          action: sync
+        - path: ./backend/build.gradle
+          target: /app/build.gradle
+          action: sync
+        - path: ./backend/settings.gradle
+          target: /app/settings.gradle
+          action: sync
 
   frontend:
     build:

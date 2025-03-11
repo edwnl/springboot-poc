@@ -2,7 +2,7 @@
 .PHONY: dev build down clean
 
 dev:
-	docker compose up --build
+	docker compose up --build --watch
 
 build:
 	docker compose build
