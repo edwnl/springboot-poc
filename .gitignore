@@ -1,0 +1,50 @@
+# Next.js
+.next/
+out/
+node_modules/
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Spring Boot
+/target/
+/bin/
+*.class
+*.jar
+*.war
+*.ear
+/mvnw
+/mvnw.cmd
+/.mvn/wrapper/maven-wrapper.jar
+
+# IDE Specific
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+
+# Logs
+*.log
+*.out
+
+# Other
+/dist/
+/build/
+/tmp/
+/temp/
+
+.idea
+.vscode
