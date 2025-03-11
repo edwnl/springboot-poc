@@ -51,3 +51,22 @@ Thumbs.db
 export
 
 target
+
+# Compiled source code
+build/
+bin/
+
+# Spring boot
+**/mvnw
+**/mvnw.cmd
+**/.mvn
+
+# Eclipse files
+.settings/
+.classpath
+.project
+
+# Netbeans files
+/nbproject/private/
+
+.gradle
