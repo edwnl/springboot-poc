@@ -13,6 +13,9 @@ const EXCLUDED_DIRS = [
   ".github",
   ".vscode",
   ".next",
+  ".idea",
+  "target",
+  ".mvn-wrapper",
   " ui"
 ];
 const EXCLUDED_FILES = [
