@@ -34,6 +34,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd backend
+          ls
           ./gradlew build
 
       - name: Log in to GitHub Container Registry
