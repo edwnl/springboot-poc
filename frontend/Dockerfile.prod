@@ -26,8 +26,7 @@ ENV NODE_ENV production
 COPY package*.json ./
 COPY next.config.* ./
 
-# Install only production dependencies
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy built assets from build stage
 COPY --from=build /app/.next ./.next
