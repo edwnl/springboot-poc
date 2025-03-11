@@ -11,13 +11,21 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+RUN ls
+
+RUN mkdir -p public
+
 # Build the application
 RUN npm run build
+
+RUN ls
 
 # Production image
 FROM node:20-alpine AS runner
 
 WORKDIR /app
+
+RUN ls
 
 # Set environment to production
 ENV NODE_ENV production
