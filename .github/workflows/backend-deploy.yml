@@ -1,5 +1,5 @@
 # .github/workflows/backend-cicd.yml
-name: Backend CI/CD
+name: Backend - Build and Deploy
 
 on:
   push:

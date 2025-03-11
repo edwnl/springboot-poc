@@ -1,5 +1,5 @@
 # .github/workflows/frontend-deploy.yml
-name: frontend deploy
+name: Frontend - Build and Deploy
 
 on:
   push:
