@@ -1,17 +1,17 @@
-# .github/workflows/backend-cicd.yml
-name: Backend CI/CD
+# .github/workflows/frontend-deploy.yml
+name: frontend deploy
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'backend/**'
-      - '.github/workflows/backend-deploy.yml'
+      - 'frontend/**'
+      - '.github/workflows/frontend-deploy.yml'
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  BACKEND_IMAGE_NAME: ${{ github.repository }}-backend
+  FRONTEND_IMAGE_NAME: ${{ github.repository }}-frontend
 
 jobs:
   build-and-push:
@@ -35,7 +35,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}
           tags: |
             type=sha,format=short
             type=ref,event=branch
@@ -44,8 +44,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
-          file: ./backend/Dockerfile.prod
+          context: ./frontend
+          file: ./frontend/Dockerfile.prod
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -67,7 +67,7 @@ jobs:
           registryUrl: ${{ env.REGISTRY }}
           registryUsername: ${{ github.actor }}
           registryPassword: ${{ secrets.GITHUB_TOKEN }}
-          containerAppName: springboot-poc-backend
+          containerAppName: springboot-poc-frontend
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          imageToDeploy: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:latest
-          targetPort: 8080
+          imageToDeploy: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
+          targetPort: 3000
