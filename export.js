@@ -15,6 +15,8 @@ const EXCLUDED_DIRS = [
   ".next",
   ".idea",
   "target",
+  ".gradle",
+  "gradle",
   ".mvn-wrapper",
   " ui"
 ];
@@ -28,6 +30,7 @@ const EXCLUDED_FILES = [
   "export-script.js",
   "package-lock.json",
   "README.md",
+  "export.js",
   ".env"
 ];
 const ALLOWED_EXTENSIONS = new Set([
@@ -46,9 +49,10 @@ const ALLOWED_EXTENSIONS = new Set([
 ]);
 // Create output directory if it doesn't exist
 const outputDir = "export";
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir);
+if (fs.existsSync(outputDir)) {
+  fs.rmSync(outputDir, { recursive: true, force: true });
 }
+fs.mkdirSync(outputDir);
 
 // Helper function to check if file should be included
 function shouldIncludeFile(filePath) {
