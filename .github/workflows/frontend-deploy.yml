@@ -77,3 +77,10 @@ jobs:
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
           targetPort: 3000
+
+      - name: Trigger new revision
+        run: |
+          az containerapp update \
+            --name springboot-poc-frontend \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --image ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
