@@ -76,4 +76,4 @@ jobs:
         run: |
           az containerapp revision restart \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --revision $(az containerapp revision list --name springboot-poc-frontend --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[0].name" -o tsv)
+            --revision $(az containerapp revision list --name springboot-poc-backend --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[0].name" -o tsv)
