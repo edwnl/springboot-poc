@@ -78,9 +78,8 @@ jobs:
           imageToDeploy: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
           targetPort: 3000
 
-      - name: Trigger new revision
+      - name: Restart latest revision
         run: |
-          az containerapp update \
-            --name springboot-poc-frontend \
+          az containerapp revision restart \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --image ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
+            --revision $(az containerapp revision list --name springboot-poc-frontend --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[0].name" -o tsv)
