@@ -41,6 +41,12 @@ jobs:
             type=ref,event=branch
             latest
 
+      - name: Create .env file
+        run: echo "${{ vars.DOTENV_FILE }}" > ./frontend/.env
+
+      - name: Debug
+        run: cat ./frontend/.env
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
