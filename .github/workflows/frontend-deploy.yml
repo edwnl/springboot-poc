@@ -41,11 +41,14 @@ jobs:
             type=ref,event=branch
             latest
 
+      - name: Set and print Short SHA output
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "Short SHA: ${{ steps.vars.outputs.sha_short }}"
+
       - name: Create .env file
         run: echo "${{ vars.DOTENV_FILE }}" > ./frontend/.env
-
-      - name: Debug
-        run: cat ./frontend/.env
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -76,5 +79,5 @@ jobs:
           registryPassword: ${{ secrets.GITHUB_TOKEN }}
           containerAppName: springboot-poc-frontend
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          imageToDeploy: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:sha-${GITHUB_SHA::7}
+          imageToDeploy: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:sha-${{ steps.vars.outputs.sha_short }}"
           targetPort: 3000
