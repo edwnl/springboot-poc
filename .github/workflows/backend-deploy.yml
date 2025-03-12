@@ -71,3 +71,9 @@ jobs:
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:latest
           targetPort: 8080
+
+      - name: Restart latest revision
+        run: |
+          az containerapp revision restart \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --revision $(az containerapp revision list --name springboot-poc-frontend --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[0].name" -o tsv)
