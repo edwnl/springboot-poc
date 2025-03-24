@@ -1,49 +1,119 @@
 // frontend/app/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TodoForm } from "@/components/TodoForm";
+import { TodoList } from "@/components/TodoList";
+import { useTodoApi } from "@/hooks/useTodoAPI";
+import { Todo } from "@/lib/type";
+import { PlusCircle } from "lucide-react";
+import { toast } from "sonner";
 
-export default function Home() {
-  const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+export default function TodosPage() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  // Use environment variable with fallback for local development
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  const {
+    loading,
+    error,
+    fetchTodos,
+    createTodo,
+    toggleTodoComplete,
+    deleteTodo,
+  } = useTodoApi();
 
-  console.log(backendUrl)
+  // Load todos on initial render
+  useEffect(() => {
+    const loadTodos = async () => {
+      const fetchedTodos = await fetchTodos();
+      setTodos(fetchedTodos);
+      setIsInitialLoading(false);
+    };
 
-  const fetchHello = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${backendUrl}/api/hello`);
-      const data = await response.text();
-      setMessage(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setMessage("Error connecting to backend");
-    } finally {
-      setLoading(false);
+    loadTodos();
+  }, [fetchTodos]);
+
+  // Show error toast when API errors occur
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  const handleAddTodo = async (title: string, description: string) => {
+    const newTodo = await createTodo({
+      title,
+      description,
+      completed: false,
+    });
+
+    if (newTodo) {
+      // Refresh todos
+      const updatedTodos = await fetchTodos();
+      setTodos(updatedTodos);
+      setDialogOpen(false);
+
+      toast.success("Your todo has been added successfully.");
+    }
+  };
+
+  const handleToggleComplete = async (id: string) => {
+    const updatedTodo = await toggleTodoComplete(id);
+
+    if (updatedTodo) {
+      // Update the todo in our local state
+      setTodos((currentTodos) =>
+        currentTodos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+        ),
+      );
+
+      toast.success(
+        `Todo marked as ${updatedTodo.completed ? "completed" : "incomplete"}.`,
+      );
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const success = await deleteTodo(id);
+
+    if (success) {
+      // Remove the todo from our local state
+      setTodos((currentTodos) => currentTodos.filter((todo) => todo.id !== id));
+
+      toast.success("Your todo has been deleted successfully.");
     }
   };
 
   return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <div className="z-10 max-w-5xl w-full items-center justify-center font-mono text-sm flex flex-col gap-4">
-          <h1 className="text-2xl font-bold mb-4">Spring Boot Proof of Concept (with Next.js)</h1>
-          <Button
-              onClick={fetchHello}
-              disabled={loading}
-              className="px-4 py-2"
-          >
-            {loading ? "Loading..." : "Fetch from Backend"}
-          </Button>
-          {message && (
-              <div className="mt-4 p-4 border rounded bg-card text-card-foreground">
-                <p>{message}</p>
-              </div>
-          )}
-        </div>
-      </main>
+    <main className="flex min-h-screen flex-col items-center p-8">
+      <div className="w-full max-w-3xl">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-2xl">Todo List</CardTitle>
+            <Button onClick={() => setDialogOpen(true)}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Todo
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <TodoForm
+              open={dialogOpen}
+              onOpenChange={setDialogOpen}
+              onSubmit={handleAddTodo}
+            />
+
+            <TodoList
+              todos={todos}
+              onToggleComplete={handleToggleComplete}
+              onDelete={handleDelete}
+              loading={loading || isInitialLoading}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </main>
   );
 }
