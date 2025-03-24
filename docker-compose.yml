@@ -19,6 +19,8 @@ services:
         - path: ./backend/settings.gradle
           target: /app/settings.gradle
           action: sync
+    env_file:
+      - ./backend/.env
 
   frontend:
     build:
