@@ -9,16 +9,11 @@ COPY build.gradle settings.gradle ./
 # Copy source code
 COPY src ./src
 
-# Add an argument for MongoDB URI with a default value
+# add env variables
 ARG MONGODB_URI
-
-# Print the MongoDB URI value for debugging
-RUN echo "Building with MONGODB_URI: $MONGODB_URI"
-
-# Set environment variable for the build
 ENV MONGODB_URI=$MONGODB_URI
 
-# Build the application with tests skipped
+# Build the application
 RUN gradle build --no-daemon
 
 # Use a JRE-only image for the runtime stage
@@ -32,4 +27,5 @@ COPY --from=build /app/build/libs/*.jar app.jar
 ARG MONGODB_URI
 ENV MONGODB_URI=$MONGODB_URI
 
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]

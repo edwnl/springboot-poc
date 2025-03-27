@@ -82,3 +82,5 @@ jobs:
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:sha-${{ needs.build-and-push.outputs.short_sha }}
           targetPort: 8080
+          environmentVariables: |
+            MONGODB_URI=${{ vars.MONGODB_URI }}
