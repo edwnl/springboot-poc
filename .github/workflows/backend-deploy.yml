@@ -58,7 +58,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secret-envs: |
+          build-args: |
             MONGODB_URI=${{ vars.MONGODB_URI }}
 
   deploy:
