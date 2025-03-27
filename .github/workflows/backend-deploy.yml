@@ -59,7 +59,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           secret-envs: |
-            MONGODB_URI='${{ vars.MONGODB_URI }}'
+            MONGODB_URI=${{ vars.MONGODB_URI }}
 
   deploy:
     needs: build-and-push
